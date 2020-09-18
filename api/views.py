@@ -6,8 +6,6 @@ from rest_framework.permissions import (
     IsAuthenticated, IsAuthenticatedOrReadOnly
 )
 from rest_framework.viewsets import ViewSetMixin
-
-from rest_framework_simplejwt.authentication import JWTAuthentication
  
 from .models import Post, Comment, Group, Follow, User
 from .permissions import IsOwnerOrReadOnly 
@@ -27,8 +25,7 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
  
-class CommentViewSet(viewsets.ModelViewSet): 
-    queryset = Comment.objects.all() 
+class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer 
     permission_classes = [ 
         IsAuthenticatedOrReadOnly, 
@@ -69,5 +66,8 @@ class FollowViewSet(ViewSetMixin, ListCreateAPIView):
     search_fields = ['=user__username', '=following__username',]
 
     def perform_create(self, serializer):
-        following = get_object_or_404(User, username=self.request.POST.get('following'))
+        following = get_object_or_404(
+            User,
+            username=self.request.POST.get('following')
+        )
         serializer.save(user=self.request.user, following=following)

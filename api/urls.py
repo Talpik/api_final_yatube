@@ -10,7 +10,6 @@ from django.urls import path, include
 from .views import PostViewSet, CommentViewSet, GroupViewSet, FollowViewSet
 
 
-
 router_v1 = routers.DefaultRouter()
 router_v1.register(r'follow', FollowViewSet, basename='Follow')
 router_v1.register(r'group', GroupViewSet, basename='Group')
